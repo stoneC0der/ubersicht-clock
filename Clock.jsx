@@ -60,19 +60,19 @@ export const className =
 /**
  * Decide if zero should be padded to hour example: 9:30PM => 09:30PM
  */
-export const usePadZero = false;
+export const usePadZero = false; // true/false
 /**
  * Decide if time separator should flashed
  */
-export const flashTimeSeparator = true;
+export const flashTimeSeparator = true; // true/false
 /**
  * Decide if seconds should be displayed
  */
-export const displaySeconds = true;
+export const displaySeconds = false; // true/false
 /**
  * Decide if 24h time should be converted to military time example: 13:30 => 1:30PM
  */
-export const useMilitaryTime = false;
+export const useMilitaryTime = true; // true/false
 
 /**
  * Apply css class based on flashTimeSeparator value
