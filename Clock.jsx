@@ -180,8 +180,8 @@ export const render = ({ output }) => {
         {hour}
         <span className={class_name}>:</span>
         {minutes}
-        {(displaySecond) ? <span className={class_name}>:</span> : ""}
-        {(displaySecond) ? seconds : ""}
+        {(displaySeconds) ? <span className={class_name}>:</span> : ""}
+        {(displaySeconds) ? seconds : ""}
         {(useMilitaryTime) ? <span className="am_pm">{AM_PM}</span> : ""}
       </h1>
       <p className="greeting">
