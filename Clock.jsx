@@ -159,16 +159,10 @@ export const render = ({ output }) => {
   const minutes = time[1];
   const seconds = time[2];
   const AM_PM = time[3];
-  // Configure time separator
   const class_name = UseFlashedTimeSeparator(seconds);
-
-  // Get user language
   const userLang = navigator.language || navigator.userLanguage;
-  // remove country specific indicator
   const processLang = userLang.substr(0, 2);
-  // Get translated greeting message
   const greeting = translate(processLang, hour);
-  // configure hour
   hour = padZero(HoursToMilitaryTime(hour));
 
   return (
