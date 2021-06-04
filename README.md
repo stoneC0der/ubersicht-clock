@@ -8,7 +8,7 @@ Download the quote-of-the-day.widget.zip and unzip it to your widgets folder (de
 
 ## Preview
 
-![Preview](https://github.com/stoneC0der/ubersicht-clock/blob/dev/screenshot.png?raw=true)
+![Preview](https://raw.githubusercontent.com/stoneC0der/ubersicht-clock/master/screenshot.png)
 
 ## Settings
 
