@@ -93,7 +93,7 @@ export const UseFlashedTimeSeparator = (seconds) => {
  * @returns {string|number}
  */
 export const padZero = (number) => {
-  if (usePadZero) {
+  if (usePadZero && useMilitaryTime) {
     return (number < 10) ? "0" + number : number;
   }
   return number;
