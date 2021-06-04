@@ -152,12 +152,9 @@ export const HoursToMilitaryTime = (hour) => {
 
 export const render = ({ output }) => {
   // split the whoami & date command output.
-  const infos = output.split("\n");
-  // retrieve username & time
-  const time = infos[0].split(' ');
-  const username = infos[1];
-
-  // retrieve hour,min,sec,AM/PM
+  const commandValues = output.split("\n");
+  const time = commandValues[0].split(' ');
+  const username = commandValues[1];
   let hour = time[0];
   const minutes = time[1];
   const seconds = time[2];
