@@ -1,15 +1,8 @@
 /**
- * to have the date parse as something like Feb 17m 2022 instead of 02/17/2022
- * not I have not test this as I currently don't have access to a mac
- * 
- */
-export const useAlternateCommand = false;
-
-/**
  * Command to get current time and username
  *
  */
-export const command = useAlternateCommand ? "date '+%H %M %S %p | %a %b %d %Y'; whoami" : "date '+%H %M %S %p | %x'; whoami";
+export const command = "date '+%H %M %S %p | %a %b %d %Y'; whoami";
 // the refresh frequency in milliseconds
 export const refreshFrequency = 1000;
 
@@ -99,8 +92,8 @@ export const dataFormat = {
   c: '%d %b, %Y', // 17 Feb, 2022
 };
 
-export const setDateFormat = (date, format) => {
-  const dateValues = date.split(' ');
+export const setDateFormat = (dateString, format) => {
+  const dateValues = dateString.split(' ');
   if (format === '%a, %d %b, %Y')
     return `${dateValues[0]}, ${dateValues[2]} ${dateValues[1]}, ${dateValues[4]}`
   if (format === '%b %d, %Y')
@@ -183,8 +176,6 @@ export const HoursToMilitaryTime = (hour) => {
   }
   return hour;
 };
-// change the key (default is b => dateFormat.b) keys are a,b,c
-const date = useAlternateCommand ? setDateFormat(datetime[1], dataFormat.b) : datetime[1];
 export const render = ({ output }) => {
   // split the whoami & date command output.
   const commandValues = output.split("\n");
@@ -198,7 +189,7 @@ export const render = ({ output }) => {
   const AM_PM = timeArray[3];
 
   // change the key (default is b => dateFormat.b) keys are a,b,c
-  const date = useAlternateCommand ? setDateFormat(datetime[1], dataFormat.b) : datetime[1];
+  const date = setDateFormat(datetime[1], dataFormat.b);
 
   const userLang = navigator.language || navigator.userLanguage;
   const processLang = userLang.substr(0, 2);
