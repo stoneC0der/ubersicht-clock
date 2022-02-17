@@ -94,15 +94,7 @@ export const dataFormat = {
 };
 
 export const setDateFormat = (dateString, format, lang) => {
-  const date = new Date(dateString);
-  if (format === 'full')
-    return date.toLocaleDateString(lang, { dateStyle: format })
-  if (format === 'long')
-    return date.toLocaleDateString(lang, { dateStyle: format })
-  if (format === 'medium')
-    return date.toLocaleDateString(lang, { dateStyle: format })
-  if (format === 'short')
-    return date.toLocaleDateString(lang, { dateStyle: format })
+  return new Date(dateString).toLocaleDateString(lang, { dateStyle: format })
 }
 /**
  * Apply css class based on flashTimeSeparator value
@@ -169,13 +161,11 @@ export const HoursToMilitaryTime = (hour) => {
   if (useMilitaryTime) {
     let parsedHour = parseInt(hour);
 
-    if (parsedHour > 12) {
+    if (parsedHour > 12) 
       return parsedHour - 12;
-    } else if (parsedHour === 0) {
+    if (parsedHour === 0) 
       return 12;
-    } else {
-      return parsedHour;
-    }
+    return parsedHour;
   }
   return hour;
 };
@@ -194,12 +184,12 @@ export const render = ({ output }) => {
   const userLang = navigator.language || navigator.userLanguage;
   const processLang = userLang.substr(0, 2);
   const greeting = translate(processLang, hour);
+  const class_name = UseFlashedTimeSeparator(seconds);
 
   // change the key (default is b => dateFormat.b) keys are a,b,c
-  const date = setDateFormat(datetime[1], dataFormat.b, processLang);
+  const date = setDateFormat(datetime[1], dataFormat.full, processLang);
 
   hour = padZero(HoursToMilitaryTime(hour));
-  const class_name = UseFlashedTimeSeparator(seconds);
 
   return (
     <div className="container">
@@ -212,7 +202,7 @@ export const render = ({ output }) => {
         {(useMilitaryTime) ? <span className="am_pm">{AM_PM}</span> : ""}
       </h1>
 
-      (showDate) ? `<h2 className="date"> ${date} </h2>` : ``
+      {(showDate) ? <h2 className="date"> {date} </h2> : ""}
 
       <p className="greeting">
         <span>{greeting}</span>{", "}
