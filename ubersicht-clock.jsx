@@ -197,8 +197,8 @@ export const render = ({ output }) => {
   const greeting = translate(processLang, hour);
   const class_name = UseFlashedTimeSeparator(seconds);
 
-  // change the key (default is b => dateFormat.b) keys are a,b,c
-  const date = setDateStyle(datetime[1], dataFormat.full, processLang);
+  // change the key (default is b => dateFormat.full) keys are full,long,medium,short
+  const date = setDateStyle(datetime[1], dataFormat.full, userLang);
 
   hour = padZero(HoursToMilitaryTime(hour));
 
