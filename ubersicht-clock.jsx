@@ -33,7 +33,7 @@ export const className =
   .time {
     font-size: 9.5rem;
     text-align: center;
-    margin-bottom: 1rem;
+    margin-bottom: 0rem;
     margin-left: auto;
     margin-right: auto;
     background: transparent;
@@ -42,6 +42,7 @@ export const className =
     font-size: 4.5rem;
     text-align: center;
     margin-bottom: 0;
+    margin-top: 1rem;
     margin-left: auto;
     margin-right: auto;
     background: transparent;
@@ -86,6 +87,9 @@ export const useMilitaryTime = true; // true/false
  */
 export const showDate = false; // true or false
 
+/**
+ * toLocaleDateString dateStyle option
+ */
 export const dataFormat = {
   full: 'full', //  Thursday, February 17, 2022
   long: 'long', // February 17, 2022
@@ -93,8 +97,15 @@ export const dataFormat = {
   short: 'short' // 2/17/2022
 };
 
-export const setDateFormat = (dateString, format, lang) => {
-  return new Date(dateString).toLocaleDateString(lang, { dateStyle: format })
+/**
+ * 
+ * @param {string} dateString A valid date string
+ * @param {string} style full, long, medium, short
+ * @param {string} lang local language short code e.g en/en-US for american english
+ * @returns string
+ */
+export const setDateStyle = (dateString, style, lang) => {
+  return new Date(dateString).toLocaleDateString(lang, { dateStyle: style })
 }
 /**
  * Apply css class based on flashTimeSeparator value
@@ -187,7 +198,7 @@ export const render = ({ output }) => {
   const class_name = UseFlashedTimeSeparator(seconds);
 
   // change the key (default is b => dateFormat.b) keys are a,b,c
-  const date = setDateFormat(datetime[1], dataFormat.full, processLang);
+  const date = setDateStyle(datetime[1], dataFormat.full, processLang);
 
   hour = padZero(HoursToMilitaryTime(hour));
 
