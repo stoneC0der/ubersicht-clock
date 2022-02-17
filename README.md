@@ -96,10 +96,29 @@ Edit the respective class font-size to change it to your liking
     font-size: 3rem;
   }
 ```
-## Note
+## Date
 
-I use this [Calendar](http://tracesof.net/uebersicht-widgets/#calendar) widget so I don't need to display the date on th widget if you would like to have the date open an issue, and i will add it as option.
+I use this [Calendar](http://tracesof.net/uebersicht-widgets/#calendar) widget so I don't need to display the date on th widget if you would like to enable the widget date change the value below to true
+```jsx
+/**
+ * to have the date parse as something like Feb 17m 2022 instead of 02/17/2022
+ * not I have not test this as I currently don't have access to a mac
+ * 
+ */
+export const useAlternateCommand = false;
+```
 
+```jsx
+/**
+ * Enable date in widget
+ * uses local format e.g: 02/17/2022 for english (I'll probably improve it and display day,month name)
+ */
+export const showDate = false; //true/false
+```
+```jsx
+  // change the key (default is b => dateFormat.b) keys are a => Thu, 17 Feb, 2022, b => Feb 17, 2022, c => 17 Feb, 2022
+  const date = useAlternateCommand ? setDateFormat(datetime[1], dataFormat.b) : datetime[1];
+```
 ## To Do
 
 - [] Add more languages

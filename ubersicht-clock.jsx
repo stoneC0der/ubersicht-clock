@@ -1,8 +1,15 @@
 /**
- * Command to get current time and username
+ * to have the date parse as something like Feb 17m 2022 instead of 02/17/2022
+ * not I have not test this as I currently don't have access to a mac
+ * 
  */
-export const command = "date '+%H %M %S %p'; whoami";
+export const useAlternateCommand = false;
 
+/**
+ * Command to get current time and username
+ *
+ */
+export const command = useAlternateCommand ? "date '+%H %M %S %p | %a %b %d %Y'; whoami" : "date '+%H %M %S %p | %x'; whoami";
 // the refresh frequency in milliseconds
 export const refreshFrequency = 1000;
 
@@ -32,6 +39,14 @@ export const className =
   }
   .time {
     font-size: 9.5rem;
+    text-align: center;
+    margin-bottom: 1rem;
+    margin-left: auto;
+    margin-right: auto;
+    background: transparent;
+  }
+  .date {
+    font-size: 4.5rem;
     text-align: center;
     margin-bottom: 0;
     margin-left: auto;
@@ -73,7 +88,26 @@ export const displaySeconds = false; // true/false
  * Decide if 24h time should be converted to military time example: 13:30 => 1:30PM
  */
 export const useMilitaryTime = true; // true/false
+/**
+ * Enable date in widget
+ */
+export const showDate = false; // true or false
 
+export const dataFormat = {
+  a: '%a, %d %b, %Y', //  Thu, 17 Feb, 2022
+  b: '%b %d, %Y', // Feb 17, 2022
+  c: '%d %b, %Y', // 17 Feb, 2022
+};
+
+export const setDateFormat = (date, format) => {
+  const dateValues = date.split(' ');
+  if (format === '%a, %d %b, %Y')
+    return `${dateValues[0]}, ${dateValues[2]} ${dateValues[1]}, ${dateValues[4]}`
+  if (format === '%b %d, %Y')
+    return ` ${dateValues[1]} ${dateValues[2]}, ${dateValues[4]}`
+  if (format === '%d %b, %Y')
+    return `${dateValues[2]} ${dateValues[1]}, ${dateValues[4]}`
+}
 /**
  * Apply css class based on flashTimeSeparator value
  * 
@@ -149,21 +183,29 @@ export const HoursToMilitaryTime = (hour) => {
   }
   return hour;
 };
-
+// change the key (default is b => dateFormat.b) keys are a,b,c
+const date = useAlternateCommand ? setDateFormat(datetime[1], dataFormat.b) : datetime[1];
 export const render = ({ output }) => {
   // split the whoami & date command output.
   const commandValues = output.split("\n");
-  const time = commandValues[0].split(' ');
   const username = commandValues[1];
-  let hour = time[0];
-  const minutes = time[1];
-  const seconds = time[2];
-  const AM_PM = time[3];
-  const class_name = UseFlashedTimeSeparator(seconds);
+  const datetime = commandValues[0].split('|');
+  const timeArray = datetime[0].split(' ');
+
+  let hour = timeArray[0];
+  const minutes = timeArray[1];
+  const seconds = timeArray[2];
+  const AM_PM = timeArray[3];
+
+  // change the key (default is b => dateFormat.b) keys are a,b,c
+  const date = useAlternateCommand ? setDateFormat(datetime[1], dataFormat.b) : datetime[1];
+
   const userLang = navigator.language || navigator.userLanguage;
   const processLang = userLang.substr(0, 2);
   const greeting = translate(processLang, hour);
+
   hour = padZero(HoursToMilitaryTime(hour));
+  const class_name = UseFlashedTimeSeparator(seconds);
 
   return (
     <div className="container">
@@ -175,6 +217,9 @@ export const render = ({ output }) => {
         {(displaySeconds) ? seconds : ""}
         {(useMilitaryTime) ? <span className="am_pm">{AM_PM}</span> : ""}
       </h1>
+
+      {(showDate) ? `<h2 className="date"> ${date} </h2>` : ``}
+
       <p className="greeting">
         <span>{greeting}</span>{", "}
         <span className="username">{username}</span>
