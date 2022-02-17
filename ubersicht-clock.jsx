@@ -2,14 +2,14 @@
  * Command to get current time and username
  *
  */
-export const command = "date '+%H %M %S %p | %a %b %d %Y'; whoami";
+export const command = "date '+%H %M %S %p | %a, %d %b, %Y'; whoami";
 // the refresh frequency in milliseconds
 export const refreshFrequency = 1000;
 
 /**
  * Export language file
  */
-import lang from './lang.json';
+import languages from './lang.json';
 
 export const className =
   `
@@ -87,19 +87,22 @@ export const useMilitaryTime = true; // true/false
 export const showDate = false; // true or false
 
 export const dataFormat = {
-  a: '%a, %d %b, %Y', //  Thu, 17 Feb, 2022
-  b: '%b %d, %Y', // Feb 17, 2022
-  c: '%d %b, %Y', // 17 Feb, 2022
+  full: 'full', //  Thursday, February 17, 2022
+  long: 'long', // February 17, 2022
+  medium: 'medium', // Feb 17, 2022
+  short: 'short' // 2/17/2022
 };
 
-export const setDateFormat = (dateString, format) => {
-  const dateValues = dateString.split(' ');
-  if (format === '%a, %d %b, %Y')
-    return `${dateValues[0]}, ${dateValues[2]} ${dateValues[1]}, ${dateValues[4]}`
-  if (format === '%b %d, %Y')
-    return ` ${dateValues[1]} ${dateValues[2]}, ${dateValues[4]}`
-  if (format === '%d %b, %Y')
-    return `${dateValues[2]} ${dateValues[1]}, ${dateValues[4]}`
+export const setDateFormat = (dateString, format, lang) => {
+  const date = new Date(dateString);
+  if (format === 'full')
+    return date.toLocaleDateString(lang, { dateStyle: format })
+  if (format === 'long')
+    return date.toLocaleDateString(lang, { dateStyle: format })
+  if (format === 'medium')
+    return date.toLocaleDateString(lang, { dateStyle: format })
+  if (format === 'short')
+    return date.toLocaleDateString(lang, { dateStyle: format })
 }
 /**
  * Apply css class based on flashTimeSeparator value
@@ -143,12 +146,12 @@ export const translate = (processLang, time) => {
       greeting = "Good evening";
     }
   } else {
-    greeting = lang[processLang][0]["Good morning"];
+    greeting = languages[processLang][0]["Good morning"];
 
     if (time >= 12 && time < 17) {
-      greeting = lang[processLang][1]["Good afternoon"];
+      greeting = languages[processLang][1]["Good afternoon"];
     } else if ((time > 17) || (time < 5)) {
-      greeting = lang[processLang][2]["Good evening"];
+      greeting = languages[processLang][2]["Good evening"];
     }
   }
 
@@ -188,12 +191,12 @@ export const render = ({ output }) => {
   const seconds = timeArray[2];
   const AM_PM = timeArray[3];
 
-  // change the key (default is b => dateFormat.b) keys are a,b,c
-  const date = setDateFormat(datetime[1], dataFormat.b);
-
   const userLang = navigator.language || navigator.userLanguage;
   const processLang = userLang.substr(0, 2);
   const greeting = translate(processLang, hour);
+
+  // change the key (default is b => dateFormat.b) keys are a,b,c
+  const date = setDateFormat(datetime[1], dataFormat.b, processLang);
 
   hour = padZero(HoursToMilitaryTime(hour));
   const class_name = UseFlashedTimeSeparator(seconds);
@@ -209,7 +212,7 @@ export const render = ({ output }) => {
         {(useMilitaryTime) ? <span className="am_pm">{AM_PM}</span> : ""}
       </h1>
 
-      {(showDate) ? `<h2 className="date"> ${date} </h2>` : ``}
+      (showDate) ? `<h2 className="date"> ${date} </h2>` : ``
 
       <p className="greeting">
         <span>{greeting}</span>{", "}
