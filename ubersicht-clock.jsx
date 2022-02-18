@@ -1,15 +1,15 @@
 /**
  * Command to get current time and username
+ *
  */
-export const command = "date '+%H %M %S %p'; whoami";
-
+export const command = "date '+%H %M %S %p | %a, %d %b, %Y'; whoami";
 // the refresh frequency in milliseconds
 export const refreshFrequency = 1000;
 
 /**
  * Export language file
  */
-import lang from './lang.json';
+import languages from './lang.json';
 
 export const className =
   `
@@ -33,7 +33,16 @@ export const className =
   .time {
     font-size: 9.5rem;
     text-align: center;
+    margin-bottom: 0rem;
+    margin-left: auto;
+    margin-right: auto;
+    background: transparent;
+  }
+  .date {
+    font-size: 4.5rem;
+    text-align: center;
     margin-bottom: 0;
+    margin-top: 1rem;
     margin-left: auto;
     margin-right: auto;
     background: transparent;
@@ -73,7 +82,31 @@ export const displaySeconds = false; // true/false
  * Decide if 24h time should be converted to military time example: 13:30 => 1:30PM
  */
 export const useMilitaryTime = true; // true/false
+/**
+ * Enable date in widget
+ */
+export const showDate = false; // true or false
 
+/**
+ * toLocaleDateString dateStyle option
+ */
+export const dataFormat = {
+  full: 'full', //  Thursday, February 17, 2022
+  long: 'long', // February 17, 2022
+  medium: 'medium', // Feb 17, 2022
+  short: 'short' // 2/17/2022
+};
+
+/**
+ * 
+ * @param {string} dateString A valid date string
+ * @param {string} style full, long, medium, short
+ * @param {string} lang local language short code e.g en/en-US for american english
+ * @returns string
+ */
+export const setDateStyle = (dateString, style, lang) => {
+  return new Date(dateString).toLocaleDateString(lang, { dateStyle: style })
+}
 /**
  * Apply css class based on flashTimeSeparator value
  * 
@@ -116,12 +149,12 @@ export const translate = (processLang, time) => {
       greeting = "Good evening";
     }
   } else {
-    greeting = lang[processLang][0]["Good morning"];
+    greeting = languages[processLang][0]["Good morning"];
 
     if (time >= 12 && time < 17) {
-      greeting = lang[processLang][1]["Good afternoon"];
+      greeting = languages[processLang][1]["Good afternoon"];
     } else if ((time > 17) || (time < 5)) {
-      greeting = lang[processLang][2]["Good evening"];
+      greeting = languages[processLang][2]["Good evening"];
     }
   }
 
@@ -139,30 +172,34 @@ export const HoursToMilitaryTime = (hour) => {
   if (useMilitaryTime) {
     let parsedHour = parseInt(hour);
 
-    if (parsedHour > 12) {
+    if (parsedHour > 12) 
       return parsedHour - 12;
-    } else if (parsedHour === 0) {
+    if (parsedHour === 0) 
       return 12;
-    } else {
-      return parsedHour;
-    }
+    return parsedHour;
   }
   return hour;
 };
-
 export const render = ({ output }) => {
   // split the whoami & date command output.
   const commandValues = output.split("\n");
-  const time = commandValues[0].split(' ');
   const username = commandValues[1];
-  let hour = time[0];
-  const minutes = time[1];
-  const seconds = time[2];
-  const AM_PM = time[3];
-  const class_name = UseFlashedTimeSeparator(seconds);
+  const datetime = commandValues[0].split('|');
+  const timeArray = datetime[0].split(' ');
+
+  let hour = timeArray[0];
+  const minutes = timeArray[1];
+  const seconds = timeArray[2];
+  const AM_PM = timeArray[3];
+
   const userLang = navigator.language || navigator.userLanguage;
   const processLang = userLang.substr(0, 2);
   const greeting = translate(processLang, hour);
+  const class_name = UseFlashedTimeSeparator(seconds);
+
+  // change the key (default is b => dateFormat.full) keys are full,long,medium,short
+  const date = setDateStyle(datetime[1], dataFormat.full, userLang);
+
   hour = padZero(HoursToMilitaryTime(hour));
 
   return (
@@ -175,6 +212,9 @@ export const render = ({ output }) => {
         {(displaySeconds) ? seconds : ""}
         {(useMilitaryTime) ? <span className="am_pm">{AM_PM}</span> : ""}
       </h1>
+
+      {(showDate) ? <h2 className="date"> {date} </h2> : ""}
+
       <p className="greeting">
         <span>{greeting}</span>{", "}
         <span className="username">{username}</span>

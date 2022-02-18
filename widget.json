@@ -1,6 +1,6 @@
 {
     "name": "clock-with-greetings.widget",
-    "description": "A widget to display time and greetings with username",
+    "description": "A widget to display time and greetings with username. You can optional display the date base on you local language",
     "author": "@stonecoder",
     "email": "stonecodersoft@gmail.com"
 }
