@@ -96,7 +96,7 @@ Edit the respective class font-size to change it to your liking
     font-size: 3rem;
   }
 ```
-## Date
+## Date (*optional*)
 
 I use this [Calendar](http://tracesof.net/uebersicht-widgets/#calendar) widget so I don't need to display the date on th widget if you would like to enable the widget date change the value below to true
 ```jsx
@@ -122,6 +122,8 @@ export const showDate = false; //true/false
 ## To Do
 
 - [] Add more languages
+  - [x] Ukrainian
+  - [x] Dutch
 - [] Fix time width being jumpy (current solution, use monospace fonts)
 
 ## Contribution

@@ -59,14 +59,24 @@
             "Good evening": "晚上好"
         }
     ],
-    "ar": [{
-            "Good morning": "صباح الخير"
+    "nl": [{
+            "Good morning": "Goedemorgen"
         },
         {
-            "Good afternoon": "طاب مسائك"
+            "Good afternoon": "Goedemiddag"
         },
         {
-            "Good evening": "مساء الخير"
+            "Good evening": "Goedenavond"
+            }
+            ],
+            "uk": [{
+                    "Good morning": "Доброго ранку"
+                },
+                {
+                    "Good afternoon": "Доброго дня"
+                },
+                {
+                    "Good evening": "Доброго вечора"
         }
     ]
 }
